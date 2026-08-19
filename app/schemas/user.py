@@ -3,8 +3,8 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 
 
-class UserInfoBase(BaseModel):
-    """用户信息基类（用于请求/数据库）"""
+class UserUpdateRequest(BaseModel):
+    """更新用户信息请求"""
 
     nickname: str | None = Field(None, max_length=20, description="昵称")
     avatar: str | None = Field(None, max_length=255, description="头像URL")
@@ -15,7 +15,7 @@ class UserInfoBase(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class UserRequest(UserInfoBase):
+class UserRequest(BaseModel):
     """注册请求（包含密码）"""
 
     username: str = Field(..., min_length=3, max_length=50, description="用户名")
@@ -53,3 +53,14 @@ class UserTokenResponse(BaseModel):
     expires_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ChangePasswordRequest(BaseModel):
+    """更新密码请求"""
+
+    old_password: str = Field(
+        ..., min_length=6, max_length=100, alias="oldPassword", description="旧密码"
+    )
+    new_password: str = Field(
+        ..., min_length=6, max_length=100, alias="newPassword", description="新密码"
+    )
