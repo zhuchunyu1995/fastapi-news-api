@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.dependencies import get_db
 from app.core.security import verify_token
 from app.crud.user import get_user_by_id
-from app.schemas.user import UserInfoResponse
+from app.models.user import User
 
 
 # 获取当前登录用户
@@ -15,7 +15,7 @@ async def get_current_user(
     authorization: Annotated[
         str, Header(..., alias="Authorization", description="Authorization token")
     ],
-) -> UserInfoResponse:
+) -> User:
 
     # 1. 验证 Header 格式
     if not authorization.startswith("Bearer "):
@@ -43,5 +43,5 @@ async def get_current_user(
             detail="用户不存在",
         )
 
-    # 5. 返回用户信息
-    return UserInfoResponse.model_validate(user)
+    # 5. 返回User模型 不做pydantic转换
+    return user

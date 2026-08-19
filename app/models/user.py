@@ -1,14 +1,14 @@
 import enum
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Enum, String, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.models.base import Base
 
-class Base(DeclarativeBase):
-    created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now, server_default=func.now(), comment="创建时间"
-    )
+if TYPE_CHECKING:
+    from app.models.favorite import Favorite
 
 
 class GenderEnum(str, enum.Enum):
@@ -68,6 +68,13 @@ class User(Base):
 
     updated_at: Mapped[datetime] = mapped_column(
         default=datetime.now, server_default=func.now(), comment="更新时间"
+    )
+
+    favorites: Mapped[list["Favorite"]] = relationship(
+        "Favorite",
+        back_populates="user",
+        lazy="selectin",
+        cascade="all, delete-orphan",
     )
 
     def __repr__(self):

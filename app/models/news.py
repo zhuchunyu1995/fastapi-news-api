@@ -1,16 +1,13 @@
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, String, Text, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.models.base import Base
 
-class Base(DeclarativeBase):
-    created_at: Mapped[datetime] = mapped_column(
-        default=datetime.now, server_default=func.now(), comment="创建时间"
-    )
-    updated_at: Mapped[datetime] = mapped_column(
-        default=datetime.now, server_default=func.now(), comment="更新时间"
-    )
+if TYPE_CHECKING:
+    from app.models.favorite import Favorite
 
 
 class Category(Base):
@@ -28,6 +25,9 @@ class Category(Base):
     )
     sort_order: Mapped[int] = mapped_column(
         default=0, nullable=False, comment="排序顺序"
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now, server_default=func.now(), comment="更新时间"
     )
 
     def __repr__(self):
@@ -72,9 +72,19 @@ class News(Base):
 
     views: Mapped[int] = mapped_column(nullable=False, default=0, comment="浏览量")
 
+    favorites: Mapped[list["Favorite"]] = relationship(
+        "Favorite",
+        back_populates="news",
+        passive_deletes=True,
+        cascade="all, delete-orphan",
+    )
     publish_time: Mapped[datetime] = mapped_column(
         index=True,
         default=datetime.now,
         server_default=func.now(),
         comment="发布时间",
+    )
+
+    updated_at: Mapped[datetime] = mapped_column(
+        default=datetime.now, server_default=func.now(), comment="更新时间"
     )
