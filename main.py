@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from core.exception_handlers import register_exception_handlers
-from core.middleware import register_cors
-from routers import news, user
+from app.core.exception_handlers import register_exception_handlers
+from app.core.middleware import register_cors
+from app.routers import news, user
 
 app = FastAPI()
 

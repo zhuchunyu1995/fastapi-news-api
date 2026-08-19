@@ -1,21 +1,20 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.app.deps import get_current_user
-from core.dependencies import get_db
-from core.response import success_response
-from core.security import create_access_token
-from crud.user import create_user, login_endpoint, user_exists
-from schemas.user import UserAuthResponse, UserInfoResponse, UserRequest
+from app.core.dependencies import DbSession
+from app.core.deps import get_current_user
+from app.core.response import success_response
+from app.core.security import create_access_token
+from app.crud.user import create_user, login_endpoint, user_exists
+from app.schemas.user import UserAuthResponse, UserInfoResponse, UserRequest
 
 router = APIRouter(prefix="/api/user", tags=["users"])
 
 
 @router.post("/register")
 async def register(
-    db: Annotated[AsyncSession, Depends(get_db)],
+    db: DbSession,
     user_info: UserRequest,
 ):
     # 检查用户名是否存在
@@ -37,7 +36,7 @@ async def register(
 
 @router.post("/login")
 async def login(
-    db: Annotated[AsyncSession, Depends(get_db)],
+    db: DbSession,
     user_info: UserRequest,
 ):
     user = await login_endpoint(db, user_info)

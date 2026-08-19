@@ -1,9 +1,9 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.security import hash_password, verify_password
-from models.user import User
-from schemas.user import UserInfoResponse, UserRequest
+from app.core.security import hash_password, verify_password
+from app.models.user import User
+from app.schemas.user import UserInfoResponse, UserRequest
 
 
 # 检查用户是否存在

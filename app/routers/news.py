@@ -1,12 +1,9 @@
-from typing import Annotated
+from fastapi import APIRouter, HTTPException, Query, status
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from core.dependencies import get_db
-from core.response import success_response
-from crud import news
-from schemas.news import NewsDetailResponse, NewsListData
+from app.core.dependencies import DbSession
+from app.core.response import success_response
+from app.crud import news
+from app.schemas.news import NewsDetailResponse, NewsListData
 
 router = APIRouter(prefix="/api/news", tags=["news"])
 
@@ -14,7 +11,7 @@ router = APIRouter(prefix="/api/news", tags=["news"])
 # 获取新闻分类列表
 @router.get("/categories")
 async def get_categories(
-    db: Annotated[AsyncSession, Depends(get_db)],
+    db: DbSession,
     skip: int = 0,
     limit: int = 100,
 ):
@@ -25,7 +22,7 @@ async def get_categories(
 # 获取新闻列表
 @router.get("/list")
 async def get_news_list(
-    db: Annotated[AsyncSession, Depends(get_db)],
+    db: DbSession,
     category_id: int = Query(..., description="新闻分类ID", alias="categoryId"),
     page: int = Query(..., description="页码", alias="page"),
     page_size: int = Query(
@@ -45,7 +42,7 @@ async def get_news_list(
 # 获取新闻详情
 @router.get("/detail")
 async def get_news_detail(
-    db: Annotated[AsyncSession, Depends(get_db)],
+    db: DbSession,
     id: int = Query(..., description="新闻ID"),
 ):
     result = await news.get_news_detail(db, id)

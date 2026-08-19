@@ -4,7 +4,7 @@ from jose import jwt
 from jose.exceptions import JWTError
 from passlib.context import CryptContext
 
-from core.config import settings
+from app.core.config import settings
 
 # 创建加密上下文
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -1,8 +1,10 @@
 from collections.abc import AsyncGenerator
+from typing import Annotated
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from core.database import async_engine
+from app.core.database import async_engine
 
 # 创建了一个工厂，每次调用它就能得到一个数据库会话（类似一个"临时工作区"）
 AsyncSessionLocal = async_sessionmaker(
@@ -29,3 +31,7 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
         finally:
             # 归还连接池子
             await session.close()
+
+
+# 义类型别名（放在文件顶部，供整个模块使用）
+DbSession = Annotated[AsyncSession, Depends(get_db)]

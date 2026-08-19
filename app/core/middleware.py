@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.config import settings
+from app.core.config import settings
 
 
 # 注册 CORS 中间件

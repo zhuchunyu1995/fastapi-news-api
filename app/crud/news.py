@@ -1,8 +1,8 @@
 from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from models.news import Category, News
-from schemas.news import CategoryResponse, NewsDetailResponse, NewsItemResponse
+from app.models.news import Category, News
+from app.schemas.news import CategoryResponse, NewsDetailResponse, NewsItemResponse
 
 
 # 获取新闻分类列表

@@ -3,10 +3,10 @@ from typing import Annotated
 from fastapi import Depends, Header, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from core.dependencies import get_db
-from core.security import verify_token
-from crud.user import get_user_by_id
-from schemas.user import UserInfoResponse
+from app.core.dependencies import get_db
+from app.core.security import verify_token
+from app.crud.user import get_user_by_id
+from app.schemas.user import UserInfoResponse
 
 
 # 获取当前登录用户
